@@ -1,6 +1,7 @@
 package com.aeon.finpro.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
@@ -18,12 +19,14 @@ public class EmployeeDetail {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "created_date", nullable = false, updatable = false)
-    @CreationTimestamp
-    private LocalDateTime createdDate;
-    @Column(name = "updated_date", nullable = false)
-    @CreationTimestamp
-    private LocalDateTime updatedDate;
-    @Column(name = "deleted_date")
-    private LocalDateTime deletedDate;
+    @Column(name = "nik", length = 16)
+    private String nik;
+
+    @Column(name = "npwp", length = 20)
+    private String npwp;
+
+    @JsonIgnore
+    @OneToOne (targetEntity = Employee.class, cascade = CascadeType.ALL)
+    @JoinColumn(name="id_karyawan", referencedColumnName = "id")
+    private Employee employee;
 }
