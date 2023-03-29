@@ -12,7 +12,7 @@ import java.util.UUID;
 @Entity
 @Data
 @Table(name = "rekening")
-@Where(clause = "deleted_at is null")
+@Where(clause = "deleted_date is null")
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
