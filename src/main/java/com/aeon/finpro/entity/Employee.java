@@ -11,6 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -18,9 +19,9 @@ import java.util.List;
 @Where(clause = "deleted_at is null")
 public class Employee {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
-    private Long id;
+    private UUID id;
 
     @Column(name = "created_date", nullable = false, updatable = false)
     @CreationTimestamp
@@ -43,7 +44,7 @@ public class Employee {
     private Date dob;
 
     @Column(name = "alamat", columnDefinition="TEXT")
-    private String alamat;
+    private String address;
 
     @Column(name = "status", length = 20)
     private String status;
