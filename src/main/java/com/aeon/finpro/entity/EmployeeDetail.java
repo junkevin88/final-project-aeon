@@ -1,12 +1,14 @@
 package com.aeon.finpro.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Where;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -14,16 +16,21 @@ import java.time.LocalDateTime;
 @Where(clause = "deleted_at is null")
 public class EmployeeDetail {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
-    private Long id;
+    private UUID id;
 
-    @Column(name = "created_date", nullable = false, updatable = false)
-    @CreationTimestamp
-    private LocalDateTime createdDate;
-    @Column(name = "updated_date", nullable = false)
-    @CreationTimestamp
-    private LocalDateTime updatedDate;
-    @Column(name = "deleted_date")
-    private LocalDateTime deletedDate;
+
+    @Size(max=16,min=16,message="nik number invalid!")
+    @Column(name = "nik", length = 16)
+    private String nik;
+
+    @Size(max=20,min=20,message="npwp number invalid!")
+    @Column(name = "npwp", length = 20)
+    private String npwp;
+
+    @JsonIgnore
+    @OneToOne (targetEntity = Employee.class, cascade = CascadeType.ALL)
+    @JoinColumn(name="id_karyawan", referencedColumnName = "id")
+    private Employee employee;
 }

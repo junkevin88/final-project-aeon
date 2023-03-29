@@ -5,8 +5,11 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Where;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -14,9 +17,14 @@ import java.time.LocalDateTime;
 @Where(clause = "deleted_at is null")
 public class EmployeeTraining {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
-    private Long id;
+    private UUID id;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(pattern = "yyMMdd")
+    @Column(name = "tanggal_training", nullable = false)
+    private Date trainingDate;
 
     @Column(name = "created_date", nullable = false, updatable = false)
     @CreationTimestamp
@@ -26,4 +34,12 @@ public class EmployeeTraining {
     private LocalDateTime updatedDate;
     @Column(name = "deleted_date")
     private LocalDateTime deletedDate;
+
+    @ManyToOne
+    @JoinColumn(name = "training_id")
+    Training training;
+
+    @ManyToOne
+    @JoinColumn(name = "karyawan_id")
+    Employee employee;
 }
