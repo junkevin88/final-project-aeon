@@ -1,11 +1,24 @@
 package com.aeon.finpro.controller;
 
 
+import com.aeon.finpro.dto.TrainingModel;
+import com.aeon.finpro.entity.Employee;
+import com.aeon.finpro.repository.EmployeeRepo;
+import com.aeon.finpro.repository.TrainingRepo;
+import com.aeon.finpro.service.EmployeeService;
+import com.aeon.finpro.service.TrainingService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+import java.util.UUID;
 
 @CrossOrigin("*")
 @RestController
@@ -13,27 +26,69 @@ import java.util.Map;
 @Slf4j
 public class TrainingController {
 
-    @PostMapping
-    public ResponseEntity<Map> insertTraining() {
+    @Autowired
+    private TrainingRepo trainingRepo;
 
-        return null;
+    @Autowired
+    TrainingService trainingService;
+
+
+    @PostMapping
+    public ResponseEntity<Map> insertTraining(TrainingModel trainingModel) {
+
+        try {
+            log.info("TrainingController.insertTraining() has been called!");
+            return new ResponseEntity(trainingService.insertTraining(trainingModel), HttpStatus.OK);
+
+        } catch (Exception e) {
+            log.error("ERROR has been found! because : {}", e.getMessage());
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping
-    public ResponseEntity<Map> updateTraining() {
+    public ResponseEntity<Map> updateTraining(TrainingModel trainingModel) {
 
-        return null;
+        try {
+            log.info("TrainingController.updateTraining() has been called!");
+            return new ResponseEntity(trainingService.updateTraining(trainingModel), HttpStatus.OK);
+
+        } catch (Exception e) {
+            log.error("ERROR has been found! because : {}", e.getMessage());
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/list")
-    public ResponseEntity<Map> listTraining() {
+    public ResponseEntity<Map> listTraining(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size,
+            @RequestParam(value = "sort", defaultValue = "ASC") String sort,
+            @RequestParam(value = "search", defaultValue = "") String search
+    ) {
+        try {
+            log.info("TrainingController.listTraining() has been called!");
+            Pageable show_data = PageRequest.of(page, size, Sort.Direction.fromString(sort), "topic");
+            Page<Employee> list = null;
+            list = trainingRepo.findListTraining(search, show_data);
+            return new ResponseEntity(list, HttpStatus.OK);
 
-        return null;
+        } catch (Exception e) {
+            log.error("ERROR has been found! because : {}", e.getMessage());
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Map> getByIdTraining() {
-        return null;
-    }
+    public ResponseEntity<Map> getByIdTraining(@PathVariable("id") UUID id) {
+        try {
+            log.info("TrainingController.getByIdTraining() has been called!");
+            return new ResponseEntity(trainingService.getTrainingById(id), HttpStatus.OK);
+
+        } catch (Exception e) {
+            log.error("ERROR has been found! because : {}", e.getMessage());
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }    }
 
 }

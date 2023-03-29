@@ -14,7 +14,7 @@ import java.util.UUID;
 @Entity
 @Data
 @Table(name = "karyawan_training")
-@Where(clause = "deleted_at is null")
+@Where(clause = "deleted_date is null")
 public class EmployeeTraining {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

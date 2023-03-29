@@ -13,7 +13,7 @@ import java.util.UUID;
 @Entity
 @Data
 @Table(name = "training")
-@Where(clause = "deleted_at is null")
+@Where(clause = "deleted_date is null")
 public class Training {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
