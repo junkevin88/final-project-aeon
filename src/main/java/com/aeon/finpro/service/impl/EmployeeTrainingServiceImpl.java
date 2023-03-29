@@ -29,7 +29,7 @@ public class EmployeeTrainingServiceImpl implements EmployeeTrainingService {
 
 
     @Override
-    public ResponseEntity<Map> insertTraining(EmployeeTrainingModel employeeTrainingModel) {
+    public ResponseEntity<Map> insertEmployeeTraining(EmployeeTrainingModel employeeTrainingModel) {
         try {
             if (employeeTrainingModel.getEmployeeId() == null) {
                 return new ResponseEntity<Map>(response.clientError("Employee ID is required"), HttpStatus.BAD_REQUEST);

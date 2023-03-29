@@ -7,6 +7,6 @@ import org.springframework.http.ResponseEntity;
 import java.util.Map;
 
 public interface EmployeeTrainingService {
-    public ResponseEntity<Map> insertTraining(EmployeeTrainingModel employeeTrainingModel);
+    public ResponseEntity<Map> insertEmployeeTraining(EmployeeTrainingModel employeeTrainingModel);
 
 }

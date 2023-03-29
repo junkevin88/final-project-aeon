@@ -38,7 +38,7 @@ public class TrainingController {
 
         try {
             log.info("TrainingController.insertTraining() has been called!");
-            return new ResponseEntity(trainingService.insertTraining(trainingModel), HttpStatus.OK);
+            return new ResponseEntity(trainingService.insertTraining(trainingModel), HttpStatus.CREATED);
 
         } catch (Exception e) {
             log.error("ERROR has been found! because : {}", e.getMessage());

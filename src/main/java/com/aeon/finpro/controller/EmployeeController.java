@@ -34,7 +34,7 @@ public class EmployeeController {
 
         try {
             log.info("EmployeeController.insertEmployee() has been called!");
-            return new ResponseEntity(employeeService.insertEmployee(employeeModel), HttpStatus.OK);
+            return new ResponseEntity(employeeService.insertEmployee(employeeModel), HttpStatus.CREATED);
 
         } catch (Exception e) {
             log.error("ERROR has been found! because : {}", e.getMessage());
