@@ -19,7 +19,7 @@ import java.util.UUID;
 
 @Entity
 @Data
-@Table(name = "user")
+@Table(name = "users")
 @Where(clause = "deleted_date is null")
 public class User implements UserDetails {
 
@@ -31,8 +31,9 @@ public class User implements UserDetails {
     @Column(name = "username", nullable = false)
     private String username;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "password")
     private String password;
+
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -49,7 +50,7 @@ public class User implements UserDetails {
     @Column(name = "is_enabled", nullable = false)
     private Boolean isEnabled;
 
-    @Column(name = "otp", nullable = false)
+    @Column(name = "otp")
     private String otp;
 
     @Enumerated(EnumType.STRING)
@@ -60,6 +61,8 @@ public class User implements UserDetails {
 
     public boolean expired;
 
+    @Column(name = "token_value", unique = true)
+    public String tokenValue;
 
 
     @Override
