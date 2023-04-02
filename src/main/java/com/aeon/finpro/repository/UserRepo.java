@@ -11,4 +11,6 @@ public interface UserRepo extends JpaRepository<User, UUID> {
     Optional<User> findByUsername(String username);
 
     Optional<User> findByToken(String token);
+
+    Optional<User> findByTokenValue(String tokenValue);
 }

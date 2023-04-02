@@ -6,6 +6,7 @@ import com.aeon.finpro.config.JwtUtils;
 import com.aeon.finpro.dto.RegisterModel;
 import com.aeon.finpro.entity.enumeration.Role;
 import com.aeon.finpro.repository.UserRepo;
+import com.aeon.finpro.service.AuthService;
 import com.aeon.finpro.utils.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
-public class AuthServiceImpl {
+public class AuthServiceImpl implements AuthService {
     private final UserRepo userRepo;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtils jwtUtils;
@@ -36,6 +37,7 @@ public class AuthServiceImpl {
             user.setPassword(passwordEncoder.encode(registerModel.getPassword()));
             user.setRole(Role.USER);
             user.setOtp(generateOtp());
+            user.setIsEnabled(false);
             userRepo.save(user);
             return new ResponseEntity<Map>(response.resSuccess(user, "Succes register user", 201), HttpStatus.CREATED);
         }catch (Exception e){
@@ -53,10 +55,14 @@ public class AuthServiceImpl {
     public ResponseEntity<Map> authenticate(AuthModel authModel) {
         try{
             User user = userRepo.findByUsername(authModel.getName()).orElseThrow();
-            user.setIsEnabled(true);
-            user.setOtp(null);
-            userRepo.save(user);
-            return new ResponseEntity<Map>(response.resSuccess(authModel, "Succes authenticate user", 200), HttpStatus.OK);
+            if(!user.getOtp().equals(authModel.getOtp())){
+                return ResponseEntity.badRequest().body(Map.of("message", "Otp is not valid"));
+            } else{
+                user.setOtp(null);
+                user.setIsEnabled(true);
+                userRepo.save(user);
+                return new ResponseEntity<Map>(response.resSuccess(user, "Succes authenticate user", 200), HttpStatus.OK);
+            }
         }catch (Exception e){
             return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
         }
@@ -65,9 +71,14 @@ public class AuthServiceImpl {
     public ResponseEntity<Map> login(AuthModel authModel) {
         try{
             User user = userRepo.findByUsername(authModel.getName()).orElseThrow();
-
-            userRepo.save(user);
-            return new ResponseEntity<Map>(response.resSuccess(authModel, "Succes logout user", 200), HttpStatus.OK);
+            if(!user.getIsEnabled()){
+                return ResponseEntity.badRequest().body(Map.of("message", "User is not authenticated"));
+            } else{
+                String token = jwtUtils.generateToken(user);
+                user.setTokenValue(token);
+                userRepo.save(user);
+                return new ResponseEntity<Map>(response.resSuccess(token, "Succes login user", 200), HttpStatus.OK);
+            }
         }catch (Exception e){
             return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
         }
