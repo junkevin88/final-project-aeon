@@ -5,6 +5,7 @@ import com.aeon.finpro.entity.Employee;
 import com.aeon.finpro.entity.EmployeeTraining;
 import com.aeon.finpro.entity.Training;
 import com.aeon.finpro.repository.EmployeeRepo;
+import com.aeon.finpro.repository.EmployeeTrainingRepo;
 import com.aeon.finpro.repository.TrainingRepo;
 import com.aeon.finpro.service.EmployeeTrainingService;
 import com.aeon.finpro.utils.Response;
@@ -26,6 +27,8 @@ public class EmployeeTrainingServiceImpl implements EmployeeTrainingService {
 
     @Autowired
     private TrainingRepo trainingRepo;
+    @Autowired
+    private EmployeeTrainingRepo employeeTrainingRepo;
 
 
     @Override
@@ -52,7 +55,7 @@ public class EmployeeTrainingServiceImpl implements EmployeeTrainingService {
             }
             employeeTraining.setTraining(training);
             employeeTraining.setTrainingDate(employeeTrainingModel.getTrainingDate());
-            employeeRepo.save(employee);
+            employeeTrainingRepo.save(employeeTraining);
             return new ResponseEntity<Map>(response.resSuccess(employeeTraining, "Success insert employee training", 201), HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<Map>(response.clientError(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);

@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -30,6 +31,7 @@ public class EmployeeController {
 
 
     @PostMapping
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<Map> insertEmployee(EmployeeModel employeeModel) {
 
         try {
@@ -43,6 +45,7 @@ public class EmployeeController {
     }
 
     @PutMapping
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<Map> updateEmployee(EmployeeModel employeeModel) {
         try {
             log.info("EmployeeController.updateEmployee() has been called!");
@@ -77,6 +80,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<Map> getByIdEmployee(@PathVariable("id") UUID id) {
         try {
             log.info("EmployeeController.getByIdEmployee() has been called!");

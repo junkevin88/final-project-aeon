@@ -32,6 +32,9 @@ public class AuthServiceImpl implements AuthService {
 
     public ResponseEntity<Map> register(RegisterModel registerModel) {
         try{
+            if(userRepo.existsByUsername(registerModel.getName())){
+                return new ResponseEntity<Map>(response.clientError("User is already taken!"), HttpStatus.CREATED);
+            }
             User user = new User();
             user.setUsername(registerModel.getName());
             user.setPassword(passwordEncoder.encode(registerModel.getPassword()));

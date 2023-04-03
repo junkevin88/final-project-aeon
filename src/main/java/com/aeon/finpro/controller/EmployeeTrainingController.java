@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -33,6 +34,7 @@ public class EmployeeTrainingController {
     EmployeeTrainingService employeeTrainingService;
 
     @PostMapping
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<Map> insertEmployeeTraining(EmployeeTrainingModel employeeTrainingModel) {
         try {
             log.info("EmployeeTrainingController.insertEmployeeTraining() has been called!");
@@ -45,6 +47,7 @@ public class EmployeeTrainingController {
     }
 
     @GetMapping("/list")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<Map> listEmployeeTraining(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size,
